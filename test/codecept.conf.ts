@@ -13,7 +13,7 @@ export const config: CodeceptJS.MainConfig = {
     Playwright: {
       browser: 'chromium',
       url: 'https://applitools.com/helloworld',
-      show: true
+      show: false
     },
     ArgosCIHelper: {
       require: '../src/index.ts',
