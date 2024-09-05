@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         working-directory: ./test
         run: |
-          npm i
+          npm i && npx playwright install chromium
           npm run test
       - name: Publish
         working-directory: .
