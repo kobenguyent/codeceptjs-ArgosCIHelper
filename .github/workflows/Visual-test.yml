@@ -18,11 +18,13 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm i && npx playwright install chromium
+        run: npm install
 
       - name: Run tests
         working-directory: ./test
-        run: npm run test
+        run: |
+          npm i && npx playwright install chromium
+          npm run test
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
