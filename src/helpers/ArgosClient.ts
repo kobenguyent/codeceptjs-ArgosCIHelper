@@ -42,7 +42,7 @@ class ArgosClient {
       // @ts-ignore
       const response = await this.restClient.makePutRequest(url, payload, headers);
       return response;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Failed to update Argos build: ${error.message}`);
     }
   }

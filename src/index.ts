@@ -96,7 +96,7 @@ class ArgosCIHelper extends Helper {
       try {
         const response = await argosClient.updateBuild(buildId, payload);
         console.log('Build updated successfully:', response);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error updating build:', error.message);
         throw Error(error.message)
       }
