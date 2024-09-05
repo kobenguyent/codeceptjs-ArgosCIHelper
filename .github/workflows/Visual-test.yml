@@ -1,0 +1,29 @@
+name: Visual Regression Testing
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm i && npx playwright install chromium
+
+      - name: Run tests
+        working-directory: ./test
+        run: npm run test
+        env:
+          ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
