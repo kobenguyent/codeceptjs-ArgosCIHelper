@@ -59,6 +59,7 @@ class ArgosCIHelper extends Helper {
       token: this.argosToken,
       commit: this.commitHash,
       files: files,
+      // @ts-ignore
       build: this.buildId,
     });
   }
