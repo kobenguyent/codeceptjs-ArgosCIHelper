@@ -32,7 +32,7 @@ class ArgosCIHelper extends Helper {
     this.argosToken = config.token;
     this.screenshotsDir = config.screenshotsDir || './output/screenshots';
     this.branch = process.env.GITHUB_REF || 'main';
-    this.buildId = process.env.GITHUB_SHA || this.commitHash;
+    this.buildId = process.env.GITHUB_SHA || 'local-build';
   }
 
   async takeScreenshot(name: string): Promise<string> {
@@ -57,7 +57,7 @@ class ArgosCIHelper extends Helper {
       branch: this.branch,
       buildName: this.buildId,
       token: this.argosToken,
-      commit: this.commitHash,
+      commit: process.env.GITHUB_SHA || this.commitHash,
       files: files,
       // @ts-ignore
       build: this.buildId,
