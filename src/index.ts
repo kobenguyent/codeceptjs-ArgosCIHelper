@@ -58,7 +58,8 @@ class ArgosCIHelper extends Helper {
       buildName: this.buildId,
       token: this.argosToken,
       commit: this.commitHash,
-      files: files,
+      paths: files,
+      build: this.buildId,
     });
   }
 
