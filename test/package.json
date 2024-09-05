@@ -1,0 +1,20 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "codeceptjs run"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "codeceptjs": "^3.6.5",
+    "playwright": "^1.46.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
