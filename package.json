@@ -1,5 +1,5 @@
 {
-  "name": "codeceptjs-ArgosCIHelper",
+  "name": "codeceptjs-argoscihelper",
   "version": "1.0.0",
   "description": "ArgosCIHelper for Codeceptjs",
   "main": "dist/index.js",
