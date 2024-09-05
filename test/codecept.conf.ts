@@ -14,8 +14,8 @@ export const config: CodeceptJS.MainConfig = {
     },
     ArgosCIHelper: {
       require: '../src/index.ts',
-      token: process.env.ARGOS_TOKEN, // Argos-CI API Token
-      screenshotsDir: './output/screenshots', // Optional screenshot directory
+      token: process.env.ARGOS_TOKEN,
+      screenshotsDir: './output/screenshots',
     },
   },
   include: {
