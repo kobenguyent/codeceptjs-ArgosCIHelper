@@ -1,6 +1,8 @@
 [![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/peternguyentr?country.x=DE&locale.x=en_US)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/peternguyew)
 
+[![Covered by Argos Visual Testing](https://argos-ci.com/badge.svg)](https://app.argos-ci.com/kobenguyent/codeceptjs-ArgosCIHelper/reference)
+
 # codeceptjs-ArgosCIHelper
 
 CodeceptJS ArgosCIHelper helper.
@@ -45,7 +47,7 @@ Output
 
 ```
 CodeceptJS v3.6.5 #StandWithUkraine
-Using test root "/Users/thanh.nguyen/Desktop/projects/ArgosCIHelper/test"
+Using test root "/Users/t/Desktop/projects/ArgosCIHelper/test"
 Helpers: Playwright, ArgosCIHelper
 Plugins: screenshotOnFail, tryTo, retryFailedStep, retryTo, eachElement
 
@@ -56,7 +58,7 @@ Visual Regression Testing --
   Test home page visual appearance
     I am on page "/"
     I take screenshot "home-page"
-    › Screenshot is saving to /Users/thanh.nguyen/Desktop/projects/ArgosCIHelper/test/output/screenshots/home-page.png
+    › Screenshot is saving to /Users/t/Desktop/projects/ArgosCIHelper/test/output/screenshots/home-page.png
 Screenshot saved: ./output/screenshots/home-page.png
   ✔ OK in 1683ms
 
