@@ -35,19 +35,18 @@ class ArgosCIHelper extends Helper {
     return filePath;
   }
 
-  async uploadScreenshots(files: string[]): Promise<void> {
+  async uploadScreenshots(files: string[]) {
     console.log('Uploading screenshots to Argos-CI...');
 
-    const result = await upload({
+    // @ts-ignore
+    return await upload({
       branch: this.branch,
-      // @ts-ignore
-      build: this.buildId,
+      buildName: this.buildId,
       token: this.argosToken,
       commit: process.env.GITHUB_SHA || 'local-commit',
-      paths: files,
-    });
-
-    console.log('Argos-CI upload result:', result);
+      files: files,
+      threshold: 0.5
+    })
   }
 
   async _finishTest(): Promise<void> {
@@ -56,7 +55,8 @@ class ArgosCIHelper extends Helper {
       .map(file => `${this.screenshotsDir}/${file}`);
 
     if (files.length > 0) {
-      await this.uploadScreenshots(files);
+      const res = await this.uploadScreenshots(files);
+      console.log(res);
     }
   }
 }
