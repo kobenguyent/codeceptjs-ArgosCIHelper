@@ -31,7 +31,7 @@ class ArgosCIHelper extends Helper {
     this.commitHash = getCommitHash();
     this.argosToken = config.token;
     this.screenshotsDir = config.screenshotsDir || './output/screenshots';
-    this.branch = process.env.GITHUB_REF || 'refs/heads/main';
+    this.branch = process.env.GITHUB_REF || 'main';
     this.buildId = process.env.GITHUB_SHA || this.commitHash;
   }
 
