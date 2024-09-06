@@ -7,6 +7,10 @@
 
 CodeceptJS ArgosCIHelper helper.
 
+## The philosophy of Argos
+Argos handles its own 'commit status' or 'check' updates. When you approve screenshots, the status is automatically updated by Argos. 
+Visual comparison does not take place during tests; it occurs separately within the Argos process.
+
 NPM package: <https://www.npmjs.com/package/codeceptjs-ArgosCIHelper>
 
 ## Installation
@@ -19,12 +23,15 @@ This helper should be added in your codeceptjs config file: `codecept.conf.*`
 
 Example:
 
-```
+```js
 {
 ...
    helpers: {
      ArgosCIHelper: {
       require: 'codeceptjs-ArgosCIHelper',
+      token: process.env.ARGOS_TOKEN,
+      screenshotsDir: './output/screenshots',
+    },
     }
    }
 ...
@@ -34,7 +41,7 @@ Example:
 ## Usage
 - If there is no auto complete for `I` actor, try running `npx codeceptjs def`
 
-```
+```js
 Feature('Visual Regression Testing');
 
 Scenario('Test home page visual appearance', async ({ I }) => {
@@ -45,7 +52,7 @@ Scenario('Test home page visual appearance', async ({ I }) => {
 
 Output
 
-```
+```bash
 CodeceptJS v3.6.5 #StandWithUkraine
 Using test root "/Users/t/Desktop/projects/ArgosCIHelper/test"
 Helpers: Playwright, ArgosCIHelper
@@ -64,6 +71,4 @@ Screenshot saved: ./output/screenshots/home-page.png
 
 
   OK  | 1 passed   // 10s
-Uploading screenshots to Argos-CI...
-
 ```
