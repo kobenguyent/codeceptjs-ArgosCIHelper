@@ -10,7 +10,17 @@ function getCommitHash(): string {
     return commitHash;
   } catch (error) {
     console.error('Failed to get commit hash:', error);
-    return 'local-commit'; // Default value if not in a Git repository
+    return 'local-commit';
+  }
+}
+
+function getLatestCommitFromMain(): string {
+  try {
+    const commitHash = execSync('git rev-parse origin/main').toString().trim();
+    return commitHash;
+  } catch (error) {
+    console.error('Failed to get the latest commit from main:', error);
+    return '';
   }
 }
 
@@ -55,6 +65,7 @@ class ArgosCIHelper extends Helper {
     // @ts-ignore
     return await upload({
       referenceBranch: this.branch,
+      referenceCommit: getLatestCommitFromMain(),
       buildName: this.buildId,
       files: files,
       branch: this.branch,
