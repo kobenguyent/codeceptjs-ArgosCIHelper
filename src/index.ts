@@ -54,12 +54,15 @@ class ArgosCIHelper extends Helper {
 
     // @ts-ignore
     return await upload({
-      branch: this.branch,
       referenceBranch: this.branch,
       buildName: this.buildId,
-      token: this.argosToken,
-      commit: this.commitHash,
       files: files,
+      branch: this.branch,
+      // @ts-ignore
+      build: this.buildId,
+      token: this.argosToken,
+      commit: process.env.GITHUB_SHA || 'local-commit',
+      paths: files,
     });
   }
 
