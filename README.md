@@ -11,6 +11,13 @@ CodeceptJS ArgosCIHelper helper.
 Argos handles its own 'commit status' or 'check' updates. When you approve screenshots, the status is automatically updated by Argos. 
 Visual comparison does not take place during tests; it occurs separately within the Argos process.
 
+![ArgosCI pipeline](https://github.com/user-attachments/assets/78fd7fd6-78b1-4940-9820-8690c68350cd)
+
+![Approved changes](https://github.com/user-attachments/assets/f20396ab-4712-4d6c-aeab-8b99cdb4e087)
+
+![Pipelines all green](https://github.com/user-attachments/assets/58734768-e5ae-4605-b13b-0c5a7f7acab6)
+
+
 NPM package: <https://www.npmjs.com/package/codeceptjs-ArgosCIHelper>
 
 ## Installation
