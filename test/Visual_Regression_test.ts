@@ -1,7 +1,7 @@
-Feature('Visual Regression Testing');
+Feature('Visual Regression');
 
-Scenario('Test home page visual appearance', async ({ I }) => {
-  I.amOnPage('?diff1');
+Scenario('home page visual appearance upload screenshot', async ({ I }) => {
+  I.amOnPage('?diff2');
   const res = await I.takeScreenshot('home-page');
 });
 
