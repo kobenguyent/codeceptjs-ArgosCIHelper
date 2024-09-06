@@ -20,9 +20,9 @@ interface ArgosHelperConfig {
 }
 
 class ArgosCIHelper extends Helper {
-  private readonly argosToken: string;
-  private readonly screenshotsDir: string;
-  private readonly branch: string;
+  private argosToken: string;
+  private screenshotsDir: string;
+  private branch: string;
   private buildId: string;
   private commitHash: string;
 

@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Upload images
         working-directory: ./test
         run: |
           npm i && npx playwright install chromium
