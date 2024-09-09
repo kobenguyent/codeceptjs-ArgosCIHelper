@@ -1,13 +1,12 @@
 import { Helper } from 'codeceptjs';
 import fs from 'fs';
-import { upload,  } from '@argos-ci/core';
+import { upload } from '@argos-ci/core';
 import { execSync } from 'node:child_process';
 import ArgosClient from './helpers/ArgosClient';
 
 function getCommitHash(): string {
   try {
-    const commitHash = execSync('git rev-parse HEAD').toString().trim();
-    return commitHash;
+    return execSync('git rev-parse HEAD').toString().trim();
   } catch (error) {
     console.error('Failed to get commit hash:', error);
     return 'local-commit';
@@ -16,20 +15,16 @@ function getCommitHash(): string {
 
 function getLatestCommitFromMain(): string {
   try {
-    const commitHash = execSync('git rev-parse origin/main').toString().trim();
-    return commitHash;
+    return execSync('git rev-parse origin/main').toString().trim();
   } catch (error) {
     console.error('Failed to get the latest commit from main:', error);
     return '';
   }
 }
 
-function getCurrentBranch() {
+function getCurrentBranch(): string {
   try {
-    const branch = execSync('git rev-parse --abbrev-ref HEAD')
-      .toString()
-      .trim();
-    return branch;
+    return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
   } catch (error) {
     console.error('Error getting the current branch:', error);
     return 'main';
@@ -39,6 +34,16 @@ function getCurrentBranch() {
 interface ArgosHelperConfig {
   token: string;
   screenshotsDir?: string;
+}
+
+interface ArgosUploadResult {
+  build: {
+    id: string;
+  };
+  screenshots: {
+    hash: string;
+    name: string;
+  }[];
 }
 
 class ArgosCIHelper extends Helper {
@@ -57,12 +62,16 @@ class ArgosCIHelper extends Helper {
     this.buildId = process.env.GITHUB_SHA || this.commitHash;
   }
 
-  async takeScreenshot(name: string): Promise<string> {
+  private getPageHelper() {
     const page = this.helpers.Puppeteer || this.helpers.Playwright;
     if (!page) {
       throw new Error('This helper requires Puppeteer or Playwright!');
     }
+    return page;
+  }
 
+  async takeScreenshot(name: string): Promise<string> {
+    const page = this.getPageHelper();
     const filePath = `${this.screenshotsDir}/${name}.png`;
 
     await page.saveScreenshot(filePath);
@@ -74,18 +83,51 @@ class ArgosCIHelper extends Helper {
   async uploadScreenshots(files: string[]): Promise<void> {
     console.log('Uploading screenshots to Argos-CI with commit:', this.commitHash);
 
-    // @ts-ignore
-    return await upload({
-      referenceBranch: 'main',
-      referenceCommit: getLatestCommitFromMain(),
-      buildName: this.buildId,
-      files: files,
-      branch: this.branch,
-      // @ts-ignore
-      build: this.buildId,
-      token: this.argosToken,
-      commit: process.env.GITHUB_SHA || this.commitHash,
-    });
+    try {
+      const result: ArgosUploadResult = await upload({
+        referenceBranch: 'ref/heads/main',
+        referenceCommit: getLatestCommitFromMain(),
+        buildName: this.buildId,
+        files,
+        branch: this.branch,
+        // @ts-ignore
+        build: this.buildId,
+        token: this.argosToken,
+        commit: process.env.GITHUB_SHA || this.commitHash,
+      });
+
+      console.log('Upload result:', result);
+      await this.updateArgosBuild(result);
+    } catch (error) {
+      console.error('Error uploading screenshots to Argos-CI:', error);
+      throw new Error('Screenshot upload failed');
+    }
+  }
+
+  private async updateArgosBuild(result: ArgosUploadResult): Promise<void> {
+    const { build, screenshots } = result;
+    const authToken = this.argosToken;
+    const buildId = build.id;
+    const payload = {
+      screenshots: screenshots.map(({ hash, name }) => ({
+        key: hash,
+        name: name,
+      })),
+      metadata: {
+        testReport: {
+          status: 'passed',
+        },
+      },
+    };
+
+    const argosClient = new ArgosClient(authToken);
+    try {
+      const response = await argosClient.updateBuild(buildId, payload);
+      console.log('Build updated successfully:', response);
+    } catch (error: any) {
+      console.error('Error updating Argos build:', error.message);
+      throw new Error(`Build update failed: ${error.message}`);
+    }
   }
 
   async _finishTest(): Promise<void> {
@@ -94,40 +136,9 @@ class ArgosCIHelper extends Helper {
       .map(file => `${this.screenshotsDir}/${file}`);
 
     if (files.length > 0) {
-      const result = await this.uploadScreenshots(files);
-      console.log('Argos-CI upload result:', result);
-
-      const authToken = this.argosToken
-      // @ts-ignore
-      const buildId = result.build.id
-      // @ts-ignore
-      const screenshotInfo = result.screenshots[0]
-
-      const payload = {
-        screenshots: [
-          {
-            key: screenshotInfo.hash,
-            name: screenshotInfo.name,
-          },
-        ],
-        metadata: {
-          testReport: {
-            status: 'passed',
-          },
-        },
-      };
-
-      const argosClient = new ArgosClient(authToken);
-
-      try {
-        const response = await argosClient.updateBuild(buildId, payload);
-        console.log('Build updated successfully:', response);
-      } catch (error: any) {
-        console.error('Error updating build:', error.message);
-        throw Error(error.message)
-      }
+      await this.uploadScreenshots(files);
     }
   }
 }
 
-export = ArgosCIHelper
+export = ArgosCIHelper;
