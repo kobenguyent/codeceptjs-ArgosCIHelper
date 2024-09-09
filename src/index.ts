@@ -24,6 +24,18 @@ function getLatestCommitFromMain(): string {
   }
 }
 
+function getCurrentBranch() {
+  try {
+    const branch = execSync('git rev-parse --abbrev-ref HEAD')
+      .toString()
+      .trim();
+    return branch;
+  } catch (error) {
+    console.error('Error getting the current branch:', error);
+    return 'main';
+  }
+}
+
 interface ArgosHelperConfig {
   token: string;
   screenshotsDir?: string;
@@ -41,7 +53,7 @@ class ArgosCIHelper extends Helper {
     this.commitHash = getCommitHash();
     this.argosToken = config.token;
     this.screenshotsDir = config.screenshotsDir || './output/screenshots';
-    this.branch = process.env.GITHUB_REF || 'main';
+    this.branch = process.env.GITHUB_REF || getCurrentBranch();
     this.buildId = process.env.GITHUB_SHA || this.commitHash;
   }
 
@@ -64,7 +76,7 @@ class ArgosCIHelper extends Helper {
 
     // @ts-ignore
     return await upload({
-      referenceBranch: this.branch,
+      referenceBranch: 'main',
       referenceCommit: getLatestCommitFromMain(),
       buildName: this.buildId,
       files: files,
@@ -72,8 +84,7 @@ class ArgosCIHelper extends Helper {
       // @ts-ignore
       build: this.buildId,
       token: this.argosToken,
-      commit: process.env.GITHUB_SHA || 'local-commit',
-      paths: files,
+      commit: process.env.GITHUB_SHA || this.commitHash,
     });
   }
 
