@@ -16,7 +16,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "@argos-ci/core": "^2.8.1",
+    "@argos-ci/core": "^2.9.0",
     "@codeceptjs/helper": "^2.0.1",
     "@types/node": "^22.5.4",
     "codeceptjs": "^3.6.5",
